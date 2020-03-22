@@ -11,27 +11,25 @@ public class wc {
 
             String string="";
 
+
             while (true) {
                 Scanner scanner = new Scanner(System.in);
-                //扫描下一行
-                if (scanner.hasNextLine()) {
-                    string = scanner.nextLine();
-                }
-
-                //-s
+                //得到参数
+                string = scanner.nextLine();
+                //分割前面参数和文件地址，前一个为参数，后一个为文件路径
                 args = string.split("\\s+");
 
-                //判断是否有足够的参数
+                //判断参数是否正确
                 if (args.length < 2) {
-                    System.out.println("请输入正确的参数...");
+                    System.out.println("请重新输入正确的参数...");
                     continue;
                 }
                 //参数类型
                 String func = args[0];
                 //文件路径
                 String filePath = args[1];
-                //判断文件是否存在
                 File file = new File(filePath);
+                //判断文件是否存在
                 if (!file.exists()) {
                     System.out.println("你指定的文件不存在....，请重新指定");
                     continue;
@@ -46,7 +44,7 @@ public class wc {
                     case "-c":
                         countChar(null, filePath);
                         break;
-                    //统计文件行数
+                    //统计文件的 行数
                     case "-l":
                         countLine(null, filePath);
                         break;
@@ -56,7 +54,7 @@ public class wc {
                         break;
                     //统计空行代码行注释行
                     case "-a":
-                        countComplex(filePath);
+                        countFileSpecialLine(filePath);
                         break;
                     default:
                         System.out.println("您输入的参数有误");
@@ -93,21 +91,20 @@ public class wc {
         public static void countWord(String fileName,String path) throws Exception {
 
             BufferedReader br=new BufferedReader(new FileReader(new File(path)));
-            int sum = 0 ;
-            String line;
-            String s = "[\\s]+";
-            while((line=br.readLine())!=null) {
-                //去掉注释符号及其他字符
-                line = line.replaceAll("[/*{}\\.]","");
-
-                String[] split = line.split(s);
+            //使用正则进行分割：空格 Tab { } ；: ~ ！ ？ ^ % + - * / | & >> >>> << <<< [ ] ( ) \\
+            int countWord = 0;
+            String str = "";
+            while((str = br.readLine()) != null){
+                //这里只使用部分符号，还有更多符号没有进行添加
+                countWord += str.split("\\s+|\\(|\\)|,|\\.|\\:|\\{|\\}|\\-|\\*|\\+|;|\\?|\\/|\\\\|/").length;
             }
-            System.out.println((fileName==null?"":fileName)+"文件单词数为："+sum);
+
+
+            System.out.println((fileName==null?"":fileName)+"文件单词数为："+countWord);
         }
 
-        /**
-         * 递归处理目录的子文件
-         */
+
+        //递归处理目录的子文件
         public static void countDir(String filePath) throws Exception {
             File dir = new File(filePath);
             if (!dir.isDirectory() || !dir.exists()){
@@ -132,9 +129,9 @@ public class wc {
         }
 
         /**
-         * 复杂统计
+         * 统计空行，代码行，注释行
          */
-        public static void countComplex(String filePath) throws IOException {
+        public static void countFileSpecialLine(String filePath) throws IOException {
             //空行
             int spaceNum = 0;
             //注释行

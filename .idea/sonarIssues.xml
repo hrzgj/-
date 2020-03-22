@@ -3,12 +3,17 @@
   <component name="issues">
     <option name="index">
       <map>
-        <entry key="$USER_HOME$/Desktop/wc-master (1)/wc-master/wc/src/main/java/com/WC.java">
+        <entry key="/Dummy.txt">
           <value>
             <set />
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/src/wc.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../wc-master (1)/wc-master/wc/src/main/java/com/WC.java">
           <value>
             <set />
           </value>
